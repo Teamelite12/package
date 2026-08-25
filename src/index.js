@@ -109,6 +109,8 @@ function toggleCamera() {
 }
 
 function sendReaction(reaction) {
+  if (!callActive) return;
+
   reactionBurst.textContent = reaction;
   reactionBurst.classList.remove("show");
   void reactionBurst.offsetWidth;
