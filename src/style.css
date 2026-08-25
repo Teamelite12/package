@@ -105,6 +105,20 @@ h1 {
   text-align: center;
 }
 
+.reaction-burst {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 5rem;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.8);
+  pointer-events: none;
+}
+
+.reaction-burst.show {
+  animation: floatReaction 1.2s ease-out;
+}
+
 .avatar {
   display: grid;
   place-items: center;
@@ -161,12 +175,13 @@ h1 {
   display: flex;
   justify-content: center;
   gap: 1rem;
-  padding: 1.5rem;
+  padding: 1.5rem 1.5rem 1rem;
   flex-wrap: wrap;
 }
 
 .control-button,
-.contact {
+.contact,
+.reaction-button {
   border: 0;
   color: #ffffff;
   cursor: pointer;
@@ -192,6 +207,31 @@ h1 {
 
 .end-call:hover {
   background: #dc2626;
+}
+
+.reactions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0 1.5rem 1.5rem;
+}
+
+.reaction-button {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  font-size: 1.45rem;
+  background: rgba(255, 255, 255, 0.14);
+  transition:
+    background 0.2s,
+    transform 0.2s;
+}
+
+.reaction-button:hover {
+  background: rgba(255, 255, 255, 0.28);
+  transform: translateY(-2px);
 }
 
 .contacts-panel {
@@ -247,5 +287,22 @@ h1 {
 
   .call-card {
     min-height: auto;
+  }
+}
+
+@keyframes floatReaction {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -30%) scale(0.8);
+  }
+
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -90%) scale(1.2);
   }
 }

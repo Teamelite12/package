@@ -10,7 +10,9 @@ const statusDot = document.getElementById("statusDot");
 const muteButton = document.getElementById("muteButton");
 const cameraButton = document.getElementById("cameraButton");
 const endButton = document.getElementById("endButton");
+const reactionBurst = document.getElementById("reactionBurst");
 const contacts = document.querySelectorAll(".contact");
+const reactionButtons = document.querySelectorAll(".reaction-button");
 
 let localStream;
 let muted = false;
@@ -96,8 +98,21 @@ function toggleCamera() {
   cameraFallback.hidden = !cameraOff && Boolean(localStream);
 }
 
+function sendReaction(reaction) {
+  reactionBurst.textContent = reaction;
+  reactionBurst.classList.remove("show");
+
+  requestAnimationFrame(() => {
+    reactionBurst.classList.add("show");
+  });
+}
+
 contacts.forEach((contact) => {
   contact.addEventListener("click", () => updateContact(contact));
+});
+
+reactionButtons.forEach((button) => {
+  button.addEventListener("click", () => sendReaction(button.dataset.reaction));
 });
 
 muteButton.addEventListener("click", toggleAudio);
