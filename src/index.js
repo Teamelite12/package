@@ -18,7 +18,7 @@ let localStream;
 let muted = false;
 let cameraOff = false;
 let callActive = true;
-let callStartedAt = Date.now();
+let callStartedAt = 0;
 let timerInterval;
 
 function formatTime(seconds) {
@@ -114,6 +114,9 @@ function sendReaction(reaction) {
   reactionBurst.textContent = reaction;
   reactionBurst.classList.remove("show");
   void reactionBurst.offsetWidth;
+  reactionBurst.onanimationend = () => {
+    reactionBurst.classList.remove("show");
+  };
 
   reactionBurst.classList.add("show");
 }
@@ -124,10 +127,6 @@ contacts.forEach((contact) => {
 
 reactionButtons.forEach((button) => {
   button.addEventListener("click", () => sendReaction(button.dataset.reaction));
-});
-
-reactionBurst.addEventListener("animationend", () => {
-  reactionBurst.classList.remove("show");
 });
 
 muteButton.addEventListener("click", toggleAudio);
