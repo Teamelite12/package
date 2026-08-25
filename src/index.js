@@ -17,7 +17,7 @@ const reactionButtons = document.querySelectorAll(".reaction-button");
 let localStream;
 let muted = false;
 let cameraOff = false;
-let callActive = true;
+let callActive = false;
 let callStartedAt = 0;
 let timerInterval;
 
@@ -56,7 +56,7 @@ function syncMediaControls() {
   cameraButton.classList.toggle("active", cameraOff);
   cameraButton.setAttribute("aria-pressed", String(cameraOff));
   cameraButton.innerHTML = cameraOff ? "<span>🚫</span> Camera off" : "<span>📹</span> Camera";
-  cameraFallback.hidden = !cameraOff && Boolean(localStream);
+  cameraFallback.hidden = Boolean(localStream) && !cameraOff;
 }
 
 function setCallState(active) {
@@ -111,14 +111,17 @@ function toggleCamera() {
 function sendReaction(reaction) {
   if (!callActive) return;
 
+  reactionBurst.removeEventListener("animationend", removeReactionClass);
   reactionBurst.textContent = reaction;
   reactionBurst.classList.remove("show");
   void reactionBurst.offsetWidth;
-  reactionBurst.onanimationend = () => {
-    reactionBurst.classList.remove("show");
-  };
+  reactionBurst.addEventListener("animationend", removeReactionClass, { once: true });
 
   reactionBurst.classList.add("show");
+}
+
+function removeReactionClass() {
+  reactionBurst.classList.remove("show");
 }
 
 contacts.forEach((contact) => {
