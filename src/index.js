@@ -95,16 +95,15 @@ function toggleCamera() {
   cameraButton.classList.toggle("active", cameraOff);
   cameraButton.setAttribute("aria-pressed", String(cameraOff));
   cameraButton.innerHTML = cameraOff ? "<span>🚫</span> Camera off" : "<span>📹</span> Camera";
-  cameraFallback.hidden = !cameraOff && Boolean(localStream);
+  cameraFallback.hidden = cameraOff ? false : Boolean(localStream);
 }
 
 function sendReaction(reaction) {
   reactionBurst.textContent = reaction;
   reactionBurst.classList.remove("show");
+  void reactionBurst.offsetWidth;
 
-  requestAnimationFrame(() => {
-    reactionBurst.classList.add("show");
-  });
+  reactionBurst.classList.add("show");
 }
 
 contacts.forEach((contact) => {
