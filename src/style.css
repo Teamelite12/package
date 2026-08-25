@@ -124,6 +124,36 @@ canvas {
   display: block;
 }
 
+.start-screen {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #1e1e1e;
+  border: 3px solid #4ec9b0;
+  padding: 40px;
+  border-radius: 10px;
+  text-align: center;
+  display: none;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+}
+
+.start-screen.show {
+  display: block;
+}
+
+.start-screen h2 {
+  color: #4ec9b0;
+  font-size: 2em;
+  margin-bottom: 15px;
+}
+
+.start-screen p {
+  font-size: 1.1em;
+  color: #d4d4d4;
+}
+
 .game-over h2 {
   color: #f48771;
   font-size: 2.5em;

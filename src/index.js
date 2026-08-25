@@ -44,6 +44,7 @@ let dropCounter = 0;
 let dropInterval = 1000;
 let lastTime = 0;
 let targetPattern = null;
+let waitingForInput = true;
 
 // Initialize game
 function init() {
@@ -68,11 +69,22 @@ function init() {
 
   // Add keyboard controls
   document.addEventListener("keydown", handleKeyPress);
+
+  // Wait for user input (keypress or click) before starting the game
+  document.addEventListener("keydown", startOnInput, { once: true });
+  document.getElementById("startScreen").addEventListener("click", startOnInput, { once: true });
+}
+
+// Hide the start screen and begin the game on first user input
+function startOnInput() {
+  if (!waitingForInput) return;
+  waitingForInput = false;
+  document.getElementById("startScreen").classList.remove("show");
 }
 
 // Game loop
 function gameLoop(time = 0) {
-  if (!gameOver && !isPaused) {
+  if (!gameOver && !isPaused && !waitingForInput) {
     const deltaTime = time - lastTime;
     lastTime = time;
 
@@ -81,6 +93,8 @@ function gameLoop(time = 0) {
       moveDown();
       dropCounter = 0;
     }
+  } else {
+    lastTime = time;
   }
 
   draw();
@@ -311,7 +325,7 @@ function updateScore() {
 
 // Handle keyboard input
 function handleKeyPress(e) {
-  if (gameOver) return;
+  if (gameOver || waitingForInput) return;
 
   switch (e.key) {
     case "ArrowLeft":
