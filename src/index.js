@@ -41,6 +41,24 @@ function startTimer() {
   timerInterval = setInterval(updateTimer, 1000);
 }
 
+function syncMediaControls() {
+  localStream?.getAudioTracks().forEach((track) => {
+    track.enabled = !muted;
+  });
+  localStream?.getVideoTracks().forEach((track) => {
+    track.enabled = !cameraOff;
+  });
+
+  muteButton.classList.toggle("active", muted);
+  muteButton.setAttribute("aria-pressed", String(muted));
+  muteButton.innerHTML = muted ? "<span>🔇</span> Unmute" : "<span>🎙️</span> Mute";
+
+  cameraButton.classList.toggle("active", cameraOff);
+  cameraButton.setAttribute("aria-pressed", String(cameraOff));
+  cameraButton.innerHTML = cameraOff ? "<span>🚫</span> Camera off" : "<span>📹</span> Camera";
+  cameraFallback.hidden = !cameraOff && Boolean(localStream);
+}
+
 function setCallState(active) {
   callActive = active;
   statusDot.classList.toggle("offline", !active);
@@ -48,6 +66,9 @@ function setCallState(active) {
   endButton.innerHTML = active ? "<span>☎️</span> End" : "<span>📞</span> Start";
 
   if (active) {
+    muted = false;
+    cameraOff = false;
+    syncMediaControls();
     startTimer();
   } else {
     clearInterval(timerInterval);
@@ -79,23 +100,12 @@ async function startCameraPreview() {
 
 function toggleAudio() {
   muted = !muted;
-  localStream?.getAudioTracks().forEach((track) => {
-    track.enabled = !muted;
-  });
-  muteButton.classList.toggle("active", muted);
-  muteButton.setAttribute("aria-pressed", String(muted));
-  muteButton.innerHTML = muted ? "<span>🔇</span> Unmute" : "<span>🎙️</span> Mute";
+  syncMediaControls();
 }
 
 function toggleCamera() {
   cameraOff = !cameraOff;
-  localStream?.getVideoTracks().forEach((track) => {
-    track.enabled = !cameraOff;
-  });
-  cameraButton.classList.toggle("active", cameraOff);
-  cameraButton.setAttribute("aria-pressed", String(cameraOff));
-  cameraButton.innerHTML = cameraOff ? "<span>🚫</span> Camera off" : "<span>📹</span> Camera";
-  cameraFallback.hidden = cameraOff ? false : Boolean(localStream);
+  syncMediaControls();
 }
 
 function sendReaction(reaction) {
