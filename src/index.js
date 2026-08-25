@@ -124,6 +124,10 @@ reactionButtons.forEach((button) => {
   button.addEventListener("click", () => sendReaction(button.dataset.reaction));
 });
 
+reactionBurst.addEventListener("animationend", () => {
+  reactionBurst.classList.remove("show");
+});
+
 muteButton.addEventListener("click", toggleAudio);
 cameraButton.addEventListener("click", toggleCamera);
 endButton.addEventListener("click", () => setCallState(!callActive));
